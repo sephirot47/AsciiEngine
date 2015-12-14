@@ -8,9 +8,11 @@ INCLUDEPATH += ./AsciiGL
 LIBS += -lncurses -lpthread -L./AsciiGL -lascii-gl
 
 SOURCES += main.cpp \
-    GameObject.cpp
+    GameObject.cpp \
+    Debug.cpp
 
 HEADERS += \
     GameObject.h \
-    Component.h
+    Component.h \
+    Debug.h
 

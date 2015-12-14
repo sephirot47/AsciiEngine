@@ -18,6 +18,7 @@
 #include "FileReader.h"
 #include "Pipeline.h"
 #include "Texture.h"
+#include "Debug.h"
 #include "VAO.h"
 
 #include "GameObject.h"
@@ -144,6 +145,7 @@ int main()
 
   for (int i = 0; i < 10000; ++i) //while (true)
   {
+    DbgLog("hola");
     //*/
     //wattron(window, COLOR_PAIR(70));
     window.erase();
@@ -210,6 +212,7 @@ int main()
     profWindow.printf(0,1,"%f ",cameraX);
     profWindow.printf(0,2,"%c", ch);
     profWindow.display();
+    Debug::dbgWindow.display();
   }
 
   //getch();
