@@ -69,12 +69,17 @@ class Transform : public Component
 {
 public:
   Transform() { }
+
+  void mec() { name = name + "MEC"; }
 };
 
 int main()
 {
   GameObject go;
-  go.addComponent<Transform>();
+  Transform *t = go.addComponent<Transform>("transform");
+  t->mec();
+  go.removeComponent<Transform>("transformME");
+  std::cout << go.getComponent<Transform>("transformMEC")->name << std::endl;
 
   Window window(0, 0, Window::getMaxWidth(), Window::getMaxHeight() * 0.9);
   Window debugWindow(Window::getMaxWidth() * 0.05, Window::getMaxHeight() * 0.9,
