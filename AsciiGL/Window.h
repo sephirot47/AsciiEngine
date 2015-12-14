@@ -2,8 +2,9 @@
 #define WINDOW_H
 
 #include <ncurses.h>
-#include<stdarg.h>
+#include <stdarg.h>
 
+#include "glm/glm.hpp"
 #include "Framebuffer.h"
 
 namespace agl 
@@ -38,6 +39,11 @@ public:
     int getY() { return y; }
     int getWidth() { return width; }
     int getHeight() { return height; }
+
+    int getClippedX();
+    int getClippedY();
+    int getClippedWidth();
+    int getClippedHeight();
 
     static int getMaxWidth();
     static int getMaxHeight();

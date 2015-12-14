@@ -14,11 +14,11 @@ void Debug::showWindow()
 {
     if(Debug::debugWindow.getWidth() == 0)
     {   //Execute only once, singleton
-        Debug::debugWindow.setPos(agl::Window::getMaxWidth()  * 0.05,
-                                  agl::Window::getMaxHeight() * 0.9);
+        Debug::debugWindow.setPos(agl::Window::getMaxWidth()  * 0.9,
+                                  agl::Window::getMaxHeight() * 0.05);
 
-        Debug::debugWindow.setSize(agl::Window::getMaxWidth()  * 0.9,
-                                   agl::Window::getMaxHeight() * 0.1);
+        Debug::debugWindow.setSize(agl::Window::getMaxWidth()  * 0.05,
+                                   agl::Window::getMaxHeight() * 0.9);
 
         Debug::debugWindow.drawBox = true;
     }
@@ -26,7 +26,7 @@ void Debug::showWindow()
     Debug::debugWindow.erase();
 
     int drawBoxOffset = (Debug::debugWindow.drawBox ? 1 : 0);
-    int y = Debug::debugWindow.getHeight() - drawBoxOffset; //Begin from the bottom
+    int y = Debug::debugWindow.getClippedHeight() - drawBoxOffset; //Begin from the bottom
     for(auto rit= Debug::windowMessages.begin(); rit != Debug::windowMessages.end(); ++rit)
     {
         Debug::debugWindow.printf(drawBoxOffset, y, "%s", (*rit).c_str());
