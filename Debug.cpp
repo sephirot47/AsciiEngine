@@ -5,26 +5,61 @@ ofstream Debug::fileStream;
 unsigned int Debug::fileMode = DbgModeLog | DbgModeWarning | DbgModeError;
 unsigned int Debug::outputMode = DbgModeFile | DbgModeTerm;
 
-agl::Window Debug::dbgWindow = agl::Window(10,10,100,100);
+agl::Window Debug::debugWindow = agl::Window(0,0,0,0);
 
-void Debug::Log(ostringstream &log)
+std::list<std::string> Debug::windowMessages = std::list<std::string>();
+const int Debug::WindowMessagesLimit = 100;
+
+void Debug::showWindow()
 {
+    if(Debug::debugWindow.getWidth() == 0)
+    {   //Execute only once, singleton
+        Debug::debugWindow.setPos(agl::Window::getMaxWidth()  * 0.05,
+                                  agl::Window::getMaxHeight() * 0.9);
+
+        Debug::debugWindow.setSize(agl::Window::getMaxWidth()  * 0.9,
+                                   agl::Window::getMaxHeight() * 0.1);
+
+        Debug::debugWindow.drawBox = true;
+    }
+
+    Debug::debugWindow.erase();
+
+    int drawBoxOffset = (Debug::debugWindow.drawBox ? 1 : 0);
+    int y = Debug::debugWindow.getHeight() - drawBoxOffset; //Begin from the bottom
+    for(auto rit= Debug::windowMessages.begin(); rit != Debug::windowMessages.end(); ++rit)
+    {
+        Debug::debugWindow.printf(drawBoxOffset, y, "%s", (*rit).c_str());
+
+        --y; //go up
+        if(y < drawBoxOffset-1) break; //When arrived to top, just stop
+    }
+
+    Debug::debugWindow.display();
+}
+
+void Debug::log(ostringstream &log)
+{
+
     if (outputMode & DbgModeFile and fileMode & DbgModeLog)
     {
         if (fileStream.is_open()) fileStream << log.str();
-    }
 
-    if (outputMode & DbgModeTerm and fileMode & DbgModeLog)
-    {
-        Debug::dbgWindow.printf(0,0, log.str().c_str());
+        Debug::windowMessages.push_front(log.str());
+        if(Debug::windowMessages.size() >= Debug::WindowMessagesLimit) Debug::windowMessages.pop_back();
+        Debug::showWindow();
     }
 }
 
-void Debug::Warning(ostringstream &log)
+void Debug::warning(ostringstream &log)
 {
     if (outputMode & DbgModeFile and fileMode & DbgModeWarning)
     {
         if (fileStream.is_open()) fileStream << log.str();
+
+        Debug::windowMessages.push_front(log.str());
+        if(Debug::windowMessages.size() >= Debug::WindowMessagesLimit) Debug::windowMessages.pop_back();
+        Debug::showWindow();
     }
 
     if (outputMode & DbgModeTerm)
@@ -33,11 +68,15 @@ void Debug::Warning(ostringstream &log)
     }
 }
 
-void Debug::Error(ostringstream &log)
+void Debug::error(ostringstream &log)
 {
     if (outputMode & DbgModeFile and fileMode & DbgModeError)
     {
         if (fileStream.is_open()) fileStream << log.str();
+
+        Debug::windowMessages.push_front(log.str());
+        if(Debug::windowMessages.size() >= Debug::WindowMessagesLimit) Debug::windowMessages.pop_back();
+        Debug::showWindow();
     }
 
     if (outputMode & DbgModeTerm)
@@ -46,7 +85,7 @@ void Debug::Error(ostringstream &log)
     }
 }
 
-void Debug::SetFile(string filepath)
+void Debug::setFile(string filepath)
 {
     if (filepath == CZ_AUTO_LOG_FILE)
     {

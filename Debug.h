@@ -5,6 +5,7 @@
 #include <sstream>
 #include <fstream>
 #include <string>
+#include <list>
 
 #include "glm/glm.hpp"
 #include "AsciiGL/Window.h"
@@ -24,53 +25,44 @@ enum DbgMode
 using namespace std;
 using namespace glm;
 
-#define DbgWarning(x) do{\
+#define debugWarning(x) do{\
     ostringstream log;\
     ostringstream wrn;\
     log << x;\
     wrn << "Warning(" << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "): " << log.str() << endl;\
-    Debug::Warning(wrn);\
+    Debug::warning(wrn);\
     log.flush();\
     wrn.flush();\
 } while(0)
 
-#define DbgError(x) do{\
+#define debugError(x) do{\
     ostringstream log;\
     ostringstream err;\
     log << x;\
     err << "Error(" << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "): " << log.str() << endl;\
-    Debug::Error(err);\
+    Debug::error(err);\
     log.flush();\
     err.flush();\
 } while(0)
 
-#define DbgLog(x) do{\
+#define debugLog(x) do{\
     ostringstream log;\
     log << x << endl;\
-    Debug::Log(log);\
+    Debug::log(log);\
     log.flush();\
 } while(0)
 
-#define DBG_ASSERT(x) do{\
-    if((x) < 0) DbgError("There was an error");\
-} while(0)
-
 #define DBG_ASSERT_MSG(x, msg) do{\
-    if((x) < 0) DbgError(msg);\
-} while(0)
-
-#define DBG_ASSERT_RET(x) do{\
-    if((x) < 0) { DbgError("There was an error"); return false;}\
+    if((x) < 0) debugError(msg);\
 } while(0)
 
 #define DBG_ASSERT_RET_MSG(x, msg) do{\
-    if((x) < 0){ DbgError(msg); return false;} \
+    if((x) < 0){ debugError(msg); return false;} \
 } while(0)
 
 #define DBG_ASSERT_RET_VOID_MSG(x, msg) do{\
     x;\
-    int error = glGetError();\
-    if(error > 0){ DbgError("GL Error('" << gluErrorString(error)  << "')" << ": " << msg); return;} \
+    if(error > 0){ debugError(msg); return;} \
 } while(0)
 
 //OSTREAM OPERATORS //////////////////////////////////
@@ -86,15 +78,19 @@ private:
     static string logFile;
     static ofstream fileStream;
 
+    static std::list<std::string> windowMessages; //message queue
+    static const int WindowMessagesLimit;
+
 public:
-    static agl::Window dbgWindow;
+    static void showWindow(); //shows the window on screen
+    static agl::Window debugWindow;
 
     static unsigned int fileMode;
     static unsigned int outputMode;
-    static void SetFile(string filepath);
-    static void Log(ostringstream &log);
-    static void Warning(ostringstream &log);
-    static void Error(ostringstream &log);
+    static void setFile(string filepath);
+    static void log(ostringstream &log);
+    static void warning(ostringstream &log);
+    static void error(ostringstream &log);
 };
 
 #endif //DEBUG_H

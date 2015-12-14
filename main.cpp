@@ -76,16 +76,7 @@ public:
 
 int main()
 {
-  GameObject go;
-  Transform *t = go.addComponent<Transform>("transform");
-  t->mec();
-  go.removeComponent<Transform>("transformME");
-  std::cout << go.getComponent<Transform>("transformMEC")->name << std::endl;
-
   Window window(0, 0, Window::getMaxWidth(), Window::getMaxHeight() * 0.9);
-  Window debugWindow(Window::getMaxWidth() * 0.05, Window::getMaxHeight() * 0.9,
-                     Window::getMaxWidth() * 0.9, Window::getMaxHeight() * 0.1);
-  debugWindow.drawBox = true;
   Window profWindow(15, 10, 20, 12); profWindow.drawBox = true;
 
   Framebuffer fb(window.getWidth(), window.getHeight());
@@ -145,11 +136,11 @@ int main()
 
   for (int i = 0; i < 10000; ++i) //while (true)
   {
-    DbgLog("hola");
+    debugLog(i);
+
     //*/
     //wattron(window, COLOR_PAIR(70));
     window.erase();
-    debugWindow.erase();
     profWindow.erase();
     int ch = getch();
     if (ch == 'a') {
@@ -204,15 +195,13 @@ int main()
     window.render(fb);
     window.display();
 
-    debugWindow.printf(0,0,"WOLOLOO");
-    debugWindow.display();
-
     auto frameEnd = std::chrono::system_clock::now();
     profWindow.printf(0,0,"%f fps",1000.0f/std::chrono::duration_cast<std::chrono::milliseconds>(frameEnd - frameStart).count());
     profWindow.printf(0,1,"%f ",cameraX);
     profWindow.printf(0,2,"%c", ch);
     profWindow.display();
-    Debug::dbgWindow.display();
+
+    Debug::showWindow();
   }
 
   //getch();
