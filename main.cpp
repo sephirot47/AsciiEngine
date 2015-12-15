@@ -77,7 +77,6 @@ public:
 int main()
 {
   Window window(0, 0, Window::getMaxWidth(), Window::getMaxHeight() * 0.9);
-  Window profWindow(15, 10, 20, 12); profWindow.drawBox = true;
 
   Framebuffer fb(window.getWidth(), window.getHeight());
   fb.clearBuffers();
@@ -126,7 +125,6 @@ int main()
   pl.program.uniforms.set("screenWidth", fb.getWidth());
   pl.program.uniforms.set("screenHeight", fb.getHeight());
 
-
   static float trans = 0.0f;
   static float cameraX = 0.0f, cameraZ = 0.0f;
 
@@ -136,30 +134,31 @@ int main()
 
   for (int i = 0; i < 10000; ++i) //while (true)
   {
-    debugLog(i);
-
-    //*/
     //wattron(window, COLOR_PAIR(70));
     window.erase();
-    profWindow.erase();
+
     int ch = getch();
-    if (ch == 'a') {
-      profWindow.printf(0,3,"LEFT   ");
+    if (ch == 'a')
+    {
+      debugLog("LEFT");
       cameraX += 0.5f;
-    } else if (ch == 'd') {
-        profWindow.printf(0,3,"RIGHT   ");
-      cameraX -= 0.5f;
-    } else if (ch == 'w') {
-        profWindow.printf(0,3,"FORWARD   ");
-      cameraZ += 0.5f;
-    } else if (ch == 's') {
-      profWindow.printf(0,3,"BACKWARDS  ");
-      cameraZ -= 0.5f;
-    } else {
-      profWindow.printf(0,3,"NONE   ");
     }
-    //*/
-    auto frameStart = std::chrono::system_clock::now();
+    else if (ch == 'd')
+    {
+      debugLog("RIGHT");
+      cameraX -= 0.5f;
+    }
+    else if (ch == 'w')
+    {
+      debugLog("FORWARD");
+      cameraZ += 0.5f;
+    }
+    else if (ch == 's')
+    {
+      debugLog("BACKWARDS");
+      cameraZ -= 0.5f;
+    }
+
     fb.clearBuffers();
 
     glm::mat4 V(1.0f);
@@ -195,15 +194,8 @@ int main()
     window.render(fb);
     window.display();
 
-    auto frameEnd = std::chrono::system_clock::now();
-    profWindow.printf(0,0,"%f fps",1000.0f/std::chrono::duration_cast<std::chrono::milliseconds>(frameEnd - frameStart).count());
-    profWindow.printf(0,1,"%f ",cameraX);
-    profWindow.printf(0,2,"%c", ch);
-    profWindow.display();
-
     Debug::showWindow();
   }
 
-  //getch();
   endwin();
 }

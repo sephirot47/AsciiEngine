@@ -10,17 +10,17 @@
 #include "glm/glm.hpp"
 #include "AsciiGL/Window.h"
 
-enum DbgMode
+enum DebugMode
 {
-    DbgModeLog = 1,
-    DbgModeWarning = 2,
-    DbgModeError = 4,
-    DbgModeFile = 8,
-    DbgModeTerm = 10
+    DebugModeLog = 1,
+    DebugModeWarning = 2,
+    DebugModeError = 4,
+    DebugModeFile = 8,
+    DebugModeTerm = 10
 };
 
-#define CZ_AUTO_LOG_FILE "cz_auto_log_file"
-#define CZ_LOG_DIR "log"
+#define DebugAutoLogFile "debug_auto_log_file"
+#define DebugLogDir "log"
 
 using namespace std;
 using namespace glm;
