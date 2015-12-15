@@ -23,6 +23,7 @@
 
 #include "GameObject.h"
 #include "Texture.h"
+#include "Mesh.h"
 #include "Transform.h"
 
 using namespace std;
@@ -71,7 +72,7 @@ glm::vec4 fshader(const GenericMap &fragmentAttributes, const GenericMap &unifor
 
 int main()
 {
-  Window window(0, 0, Window::getMaxWidth(), Window::getMaxHeight() * 0.9);
+  Window window(0, 0, Window::getMaxWidth(), Window::getMaxHeight());
 
   Framebuffer fb(window.getWidth(), window.getHeight());
   fb.clearBuffers();
@@ -79,38 +80,6 @@ int main()
   Pipeline pl;
   pl.program.fragmentShader = fshader;
   pl.program.vertexShader = vshader;
-
-  std::vector<glm::vec3> pos, normals;
-  std::vector<glm::vec2> uvs;
-  std::vector<glm::vec3> colors;
-  bool triangles;
-  FileReader::ReadOBJ("./luigi-lowpoly.obj", pos, uvs, normals, triangles);
-  float minx = 99999, maxx = -99999, miny = 99999, maxy = -99999, minz = 99999, maxz = -99999;
-
-  for(int i = 0; i < pos.size(); ++i)
-  {
-    minx = std::min(minx, pos[i].x);
-    maxx = std::max(maxx, pos[i].x);
-    miny = std::min(miny, pos[i].y);
-    maxy = std::max(maxy, pos[i].y);
-    minz = std::min(minz, pos[i].z);
-    maxz = std::max(maxz, pos[i].z);
-  }
-
-  for(int i = 0; i < pos.size(); ++i)
-  {
-    glm::vec3 color = pos[i];
-    color.x = (color.x - minx) / (maxx - minx);
-    color.y = (color.y - miny) / (maxy - miny);
-    color.z = (color.z - minz) / (maxz - minz);
-    colors.push_back(color);
-  }
-
-  VAO vao;
-  vao.addVBO("position", pos);
-  vao.addVBO("color", colors);
-  vao.addVBO("normal", normals);
-  vao.addVBO("uv", uvs);
 
   float rotation = 0.0f;
 
@@ -122,6 +91,9 @@ int main()
 
   static float trans = 0.0f;
   static float cameraX = 0.0f, cameraZ = 0.0f;
+
+  Mesh luigi;
+  luigi.loadFromFile("./luigi-lowpoly.obj");
 
   ae::Texture *texture = new ae::Texture();
   texture->loadFromFile("luigiD.jpg");
@@ -160,8 +132,6 @@ int main()
     V = glm::lookAt(glm::vec3(cameraX,0,cameraZ),glm::vec3(cameraX,0,cameraZ-20),glm::vec3(0,1,0));
     pl.program.uniforms.set("V", V);
 
-
-
     trans += 0.05;
     rotation += 0.005f;
 
@@ -173,21 +143,21 @@ int main()
     t.scale = glm::vec3(0.15);
     t.getModelMatrix(M);
     pl.program.uniforms.set("M", M);
-    pl.drawVAO(vao, fb);
+    pl.drawVAO(*(luigi.getVAO()), fb);
 
     t.position =   glm::vec3(((sin(trans*0.5f))*3),-15,-20);
     t.rotation = glm::angleAxis( rotation*9, glm::vec3(0,1,0));
     t.scale = glm::vec3(0.2);
     t.getModelMatrix(M);
     pl.program.uniforms.set("M", M);
-    pl.drawVAO(vao, fb);
+    pl.drawVAO(*(luigi.getVAO()), fb);
 
     t.position =  glm::vec3(12,-8,-13);
     t.rotation = glm::angleAxis(rotation*14, glm::vec3(0,1,0));
     t.scale = glm::vec3(0.2);
     t.getModelMatrix(M);
     pl.program.uniforms.set("M", M);
-    pl.drawVAO(vao, fb);
+    pl.drawVAO(*(luigi.getVAO()), fb);
 
     window.render(fb);
     window.display();

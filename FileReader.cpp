@@ -75,7 +75,8 @@ void FileReader::GetOBJFormat(const char *filepath, bool &uvs, bool &normals, bo
   fclose(f);
 }
 
-bool FileReader::ReadOBJ(const char *filepath, std::vector<glm::vec3> &vertexPos,
+bool FileReader::ReadOBJ(const char *filepath,
+                         std::vector<glm::vec3> &vertexPos,
                          std::vector<glm::vec2> &vertexUvs,
                          std::vector<glm::vec3> &vertexNormals,
                          bool &triangles)

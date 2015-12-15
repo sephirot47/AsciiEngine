@@ -12,7 +12,8 @@ SOURCES += main.cpp \
     Debug.cpp \
     Transform.cpp \
     FileReader.cpp \
-    Texture.cpp
+    Texture.cpp \
+    Mesh.cpp
 
 HEADERS += \
     GameObject.h \
@@ -20,5 +21,6 @@ HEADERS += \
     Debug.h \
     Transform.h \
     FileReader.h \
-    Texture.h
+    Texture.h \
+    Mesh.h
 
