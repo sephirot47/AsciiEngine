@@ -3,6 +3,8 @@ CONFIG += console c++11 debug
 CONFIG -= app_bundle
 CONFIG -= qt
 
+QMAKE_CXXFLAGS += -std=c++11
+
 INCLUDEPATH += ./AsciiGL
 
 LIBS += -lncurses -lpthread -L./AsciiGL -lascii-gl
@@ -15,7 +17,8 @@ SOURCES += main.cpp \
     Texture.cpp \
     Mesh.cpp \
     Scene.cpp \
-    Game.cpp
+    Game.cpp \
+    stb_image.cpp
 
 HEADERS += \
     GameObject.h \
@@ -26,5 +29,6 @@ HEADERS += \
     Texture.h \
     Mesh.h \
     Scene.h \
-    Game.h
+    Game.h \
+    stb_image.h
 

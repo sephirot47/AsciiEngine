@@ -6,7 +6,6 @@
 #include <thread>         // std::this_thread::sleep_for
 #include <chrono>         // std::chrono::seconds
 
-#define GLM_SWIZZLE
 #include "Window.h"
 
 #include "Framebuffer.h"
@@ -24,21 +23,22 @@
 #include "Scene.h"
 #include "AsciiGL/AsciiGL.h"
 
-using namespace std;
-using namespace agl;
 using namespace ae;
+
+namespace ae
+{
 
 class Game
 {
-private:
-  void loop();
-
 public:
-  Scene scene;
   agl::Window window;
+  Scene currentScene;
   agl::Pipeline pl;
 
   Game();
+  void loop();
 };
+
+}
 
 #endif // GAME_H

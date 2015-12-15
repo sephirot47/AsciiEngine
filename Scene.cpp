@@ -1,10 +1,8 @@
 #include "Scene.h"
 
-Scene::Scene(): Scene(0, 0)
-{
-}
+using namespace ae;
 
-glm::vec4 vshader(const GenericMap &vertexAttributes, const GenericMap &uniforms, GenericMap &fragmentAttributes)
+glm::vec4 vshader(const agl::GenericMap &vertexAttributes, const agl::GenericMap &uniforms, agl::GenericMap &fragmentAttributes)
 {
   glm::mat4 M, P, V;
   uniforms.getMat4("M", M);
@@ -26,7 +24,7 @@ glm::vec4 vshader(const GenericMap &vertexAttributes, const GenericMap &uniforms
   return P * V * tPos;
 }
 
-glm::vec4 fshader(const GenericMap &fragmentAttributes, const GenericMap &uniforms)
+glm::vec4 fshader(const agl::GenericMap &fragmentAttributes, const agl::GenericMap &uniforms)
 {
   glm::vec3 normal;
   fragmentAttributes.getVec3("normal", normal);
@@ -58,10 +56,4 @@ Scene::Scene(int width, int height) : framebuffer(agl::Framebuffer(width, height
   pl.program.uniforms.set("P", P);
   pl.program.uniforms.set("screenWidth", framebuffer.getWidth());
   pl.program.uniforms.set("screenHeight", framebuffer.getHeight());
-}
-
-void Scene::display(agl::Window &window)
-{
-  framebuffer.clearBuffers();
-  window.render(framebuffer);
 }

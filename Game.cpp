@@ -1,9 +1,12 @@
 #include "Game.h"
 
-Game::Game() : window(agl::Window(0, 0, agl::Window::getMaxWidth(), agl::Window::getMaxHeight()))
-{
-  scene = Scene(window.getWidth(), window.getHeight());
+using namespace std;
+using namespace agl;
+using namespace ae;
 
+Game::Game() : window(agl::Window(0, 0, agl::Window::getMaxWidth(), agl::Window::getMaxHeight())),
+               currentScene(Scene(window.getWidth(), window.getHeight()))
+{
   ae::Texture *texture = new ae::Texture();
   texture->loadFromFile("luigiD.jpg");
   pl.program.uniforms.set("tex", texture);
@@ -11,8 +14,13 @@ Game::Game() : window(agl::Window(0, 0, agl::Window::getMaxWidth(), agl::Window:
 
 void Game::loop()
 {
-  static float trans = 0.0f;
+  static float trans = 0.0f, rotation = 0.0f;
   static float cameraX = 0.0f, cameraZ = 0.0f;
+
+  GameObject luigi;
+  luigi.addComponent<Transform>();
+  luigi.addComponent<Mesh>();
+  luigi.getComponent<Mesh>()->loadFromFile("./luigi-lowpoly.obj");
 
   while (true)
   {
@@ -40,8 +48,6 @@ void Game::loop()
       cameraZ -= 0.5f;
     }
 
-    fb.clearBuffers();
-
     glm::mat4 V(1.0f);
     V = glm::lookAt(glm::vec3(cameraX,0,cameraZ),glm::vec3(cameraX,0,cameraZ-20),glm::vec3(0,1,0));
     pl.program.uniforms.set("V", V);
@@ -57,24 +63,27 @@ void Game::loop()
     t.scale = glm::vec3(0.15);
     t.getModelMatrix(M);
     pl.program.uniforms.set("M", M);
-    pl.drawVAO(*(luigi.getComponent<Mesh>()->getVAO()), fb);
+    pl.drawVAO(*(luigi.getComponent<Mesh>()->getVAO()), currentScene.framebuffer);
 
     t.position =   glm::vec3(((sin(trans*0.5f))*3),-15,-20);
     t.rotation = glm::angleAxis( rotation*9, glm::vec3(0,1,0));
     t.scale = glm::vec3(0.2);
     t.getModelMatrix(M);
     pl.program.uniforms.set("M", M);
-    pl.drawVAO(*(luigi.getComponent<Mesh>()->getVAO()), fb);
+    pl.drawVAO(*(luigi.getComponent<Mesh>()->getVAO()), currentScene.framebuffer);
 
     t.position =  glm::vec3(12,-8,-13);
     t.rotation = glm::angleAxis(rotation*14, glm::vec3(0,1,0));
     t.scale = glm::vec3(0.2);
     t.getModelMatrix(M);
     pl.program.uniforms.set("M", M);
-    pl.drawVAO(*(luigi.getComponent<Mesh>()->getVAO()), fb);
+    pl.drawVAO(*(luigi.getComponent<Mesh>()->getVAO()), currentScene.framebuffer);
 
-    window.render(fb);
+    //Render scene
+    currentScene.framebuffer.clearBuffers();
+    window.render(currentScene.framebuffer);
     window.display();
+    //
 
     Debug::showWindow();
   }

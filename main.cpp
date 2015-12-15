@@ -3,7 +3,6 @@
 #include <thread>         // std::this_thread::sleep_for
 #include <chrono>         // std::chrono::seconds
 
-#define GLM_SWIZZLE
 #include "Window.h"
 
 #include "Framebuffer.h"
@@ -26,13 +25,8 @@ using namespace ae;
 
 int main()
 {
-  GameObject luigi;
-  luigi.addComponent<Transform>();
-  luigi.addComponent<Mesh>();
-  luigi.getComponent<Mesh>()->loadFromFile("./luigi-lowpoly.obj");
-
   Game game;
-
+  game.loop();
   getch();
   endwin();
 }

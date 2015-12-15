@@ -1,10 +1,17 @@
 #ifndef SCENE_H
 #define SCENE_H
 
+#include "Texture.h"
+#include "GameObject.h"
 #include "AsciiGL/AsciiGL.h"
+
+namespace ae
+{
 
 class Scene
 {
+friend class Game;
+
 private:
 
   agl::Framebuffer framebuffer;
@@ -12,10 +19,9 @@ private:
 
 public:
 
-  Scene();
   Scene(int width, int height);
-
-  void display(agl::Window &window);
 };
+
+}
 
 #endif // SCENE_H
