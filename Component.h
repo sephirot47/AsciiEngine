@@ -13,8 +13,7 @@ public:
   std::string name;
 
 protected:
-  Component()
-  {}
+  Component() {}
 };
 
 }

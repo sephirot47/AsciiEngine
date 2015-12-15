@@ -2,13 +2,14 @@
 #define MESH_H
 
 #include <vector>
+#include "Component.h"
 #include "FileReader.h"
 #include "AsciiGL/AsciiGL.h"
 
 namespace ae
 {
 
-class Mesh
+class Mesh : public Component
 {
 private:
 

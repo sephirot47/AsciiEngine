@@ -16,7 +16,7 @@ namespace ae
 class GameObject
 {
 private:
-  std::map<std::type_index, std::vector<Component>> components;
+  std::map<std::type_index, std::vector<Component*>> components;
 
 public:
   GameObject();
@@ -27,20 +27,19 @@ public:
 
   template <class T> T* addComponent(const std::string &name)
   {
-    //T comp;
     auto x = components.find(typeid(T));
-    if(x == components.end())
-      components[typeid(T)] = std::vector<Component>();
+    if(x == components.end()) components[typeid(T)] = std::vector<Component*>();
 
-    std::vector<Component> &v = components[typeid(T)];
-    v.push_back(T());
-    if(name != "") v[v.size()-1].name = name;
+    components[typeid(T)].push_back(new T());
+    int s = components[typeid(T)].size();
+    if(name != "") components[typeid(T)][s-1]->name = name;
+    return (T*)(components[typeid(T)][s-1]);
   }
 
   template <class T> T* getComponent()
   {
     auto x = components.find(typeid(T));
-    if(x != components.end()) return (T*)(&(x->second[0]));
+    if(x != components.end()) return (T*)(x->second[0]);
     return nullptr;
   }
 
@@ -50,7 +49,7 @@ public:
     if(x != components.end())
     {
       for(int i = 0; i < x->second.size(); ++i)
-        if(x->second[i].name == name) return (T*)(&(x->second[i]));
+        if(x->second[i]->name == name) return (T*)(&(x->second[i]));
     }
     return nullptr;
   }
@@ -66,7 +65,7 @@ public:
     auto v = components.find(typeid(T));
     for(int i = 0; i < v->second.size(); ++i)
     {
-      if(v->second[i].name == name) v->second.erase(v->second.begin() + i);
+      if(v->second[i]->name == name) v->second.erase(v->second.begin() + i);
     }
   }
 };

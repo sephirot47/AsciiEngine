@@ -7,7 +7,7 @@
 namespace ae
 {
 
-class Transform : Component
+class Transform : public Component
 {
 public:
 

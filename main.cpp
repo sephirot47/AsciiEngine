@@ -1,6 +1,3 @@
-#include <ncurses.h>
-#include <stdlib.h>
-
 #include <vector>
 #include <iostream>
 #include <thread>         // std::this_thread::sleep_for
@@ -72,6 +69,11 @@ glm::vec4 fshader(const GenericMap &fragmentAttributes, const GenericMap &unifor
 
 int main()
 {
+  GameObject luigi;
+  luigi.addComponent<Transform>();
+  luigi.addComponent<Mesh>();
+  luigi.getComponent<Mesh>()->loadFromFile("./luigi-lowpoly.obj");
+
   Window window(0, 0, Window::getMaxWidth(), Window::getMaxHeight());
 
   Framebuffer fb(window.getWidth(), window.getHeight());
@@ -92,16 +94,12 @@ int main()
   static float trans = 0.0f;
   static float cameraX = 0.0f, cameraZ = 0.0f;
 
-  Mesh luigi;
-  luigi.loadFromFile("./luigi-lowpoly.obj");
-
   ae::Texture *texture = new ae::Texture();
   texture->loadFromFile("luigiD.jpg");
   pl.program.uniforms.set("tex", texture);
 
-  for (int i = 0; i < 10000; ++i) //while (true)
+  while (true)
   {
-    //wattron(window, COLOR_PAIR(70));
     window.erase();
 
     int ch = getch();
@@ -137,27 +135,28 @@ int main()
 
     glm::mat4 M(1.0f);
 
-    Transform t;
+    Transform& t = *(luigi.getComponent<Transform>());
     t.position =  glm::vec3(-12,-8, ((sin(trans)*0.5+0.5f)*-37)-1);
     t.rotation = glm::angleAxis(rotation*5, glm::vec3(0,1,0));
     t.scale = glm::vec3(0.15);
     t.getModelMatrix(M);
     pl.program.uniforms.set("M", M);
-    pl.drawVAO(*(luigi.getVAO()), fb);
+    pl.drawVAO(*(luigi.getComponent<Mesh>()->getVAO()), fb);
 
     t.position =   glm::vec3(((sin(trans*0.5f))*3),-15,-20);
     t.rotation = glm::angleAxis( rotation*9, glm::vec3(0,1,0));
     t.scale = glm::vec3(0.2);
     t.getModelMatrix(M);
     pl.program.uniforms.set("M", M);
-    pl.drawVAO(*(luigi.getVAO()), fb);
+    pl.drawVAO(*(luigi.getComponent<Mesh>()->getVAO()), fb);
 
     t.position =  glm::vec3(12,-8,-13);
     t.rotation = glm::angleAxis(rotation*14, glm::vec3(0,1,0));
     t.scale = glm::vec3(0.2);
     t.getModelMatrix(M);
     pl.program.uniforms.set("M", M);
-    pl.drawVAO(*(luigi.getVAO()), fb);
+    pl.drawVAO(*(luigi.getComponent<Mesh>()->getVAO()), fb);
+
 
     window.render(fb);
     window.display();
@@ -165,5 +164,6 @@ int main()
     Debug::showWindow();
   }
 
+  getch();
   endwin();
 }
