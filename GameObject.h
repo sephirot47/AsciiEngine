@@ -19,7 +19,9 @@ private:
   std::map<std::type_index, std::vector<Component*>> components;
 
 public:
+
   GameObject();
+
   template <class T> T* addComponent()
   {
     return addComponent<T>("");

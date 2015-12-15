@@ -1,3 +1,6 @@
+#ifndef GAME_H
+#define GAME_H
+
 #include <vector>
 #include <iostream>
 #include <thread>         // std::this_thread::sleep_for
@@ -16,23 +19,26 @@
 #include "GameObject.h"
 #include "Texture.h"
 #include "Mesh.h"
-#include "Game.h"
 #include "Transform.h"
+
+#include "Scene.h"
+#include "AsciiGL/AsciiGL.h"
 
 using namespace std;
 using namespace agl;
 using namespace ae;
 
-
-int main()
+class Game
 {
-  GameObject luigi;
-  luigi.addComponent<Transform>();
-  luigi.addComponent<Mesh>();
-  luigi.getComponent<Mesh>()->loadFromFile("./luigi-lowpoly.obj");
+private:
+  void loop();
 
-  Game game;
+public:
+  Scene scene;
+  agl::Window window;
+  agl::Pipeline pl;
 
-  getch();
-  endwin();
-}
+  Game();
+};
+
+#endif // GAME_H
