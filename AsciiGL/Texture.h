@@ -1,10 +1,9 @@
 #ifndef TEXTURE_H
 #define TEXTURE_H
 
-#include "stb_image.h"
+#include <vector>
 #include <string>
-#include "FileReader.h"
-
+#include "glm/glm.hpp"
 
 namespace agl 
 {
@@ -18,7 +17,6 @@ public:
   Texture();
   Texture(int w, int h, int components, float initialValue = 0.0f);
 
-  void loadFromFile(const std::string &filepath);
   void loadFromMatrix(const std::vector< std::vector<float> > &dataMatrix);
 
   int getWidth() { return width; }

@@ -1,11 +1,11 @@
 #ifndef TRANSFORM_H
 #define TRANSFORM_H
 
+#include "AsciiGL/AsciiGL.h"
 #include "Component.h"
 
-#include "glm/glm.hpp"
-#include "glm/gtx/transform.hpp"
-#include "glm/gtc/quaternion.hpp"
+namespace ae
+{
 
 class Transform : Component
 {
@@ -19,5 +19,7 @@ public:
 
     void getModelMatrix(glm::mat4 &modelMatrix) const;
 };
+
+}
 
 #endif // TRANSFORM_H

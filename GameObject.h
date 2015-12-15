@@ -6,7 +6,12 @@
 #include <vector>
 #include <typeinfo>
 #include <typeindex>
+
+#include "AsciiGL/AsciiGL.h"
 #include "Component.h"
+
+namespace ae
+{
 
 class GameObject
 {
@@ -65,5 +70,7 @@ public:
     }
   }
 };
+
+}
 
 #endif // GAMEOBJECT_H

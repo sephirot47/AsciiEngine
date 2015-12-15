@@ -2,6 +2,10 @@
 #define COMPONENT_H
 
 #include <string>
+#include "AsciiGL/AsciiGL.h"
+
+namespace ae
+{
 
 class Component
 {
@@ -12,5 +16,7 @@ protected:
   Component()
   {}
 };
+
+}
 
 #endif // COMPONENT_H

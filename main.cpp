@@ -26,6 +26,7 @@
 
 using namespace std;
 using namespace agl;
+using namespace ae;
 
 glm::vec4 vshader(const GenericMap &vertexAttributes, const GenericMap &uniforms, GenericMap &fragmentAttributes)
 {

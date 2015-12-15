@@ -10,11 +10,13 @@ LIBS += -lncurses -lpthread -L./AsciiGL -lascii-gl
 SOURCES += main.cpp \
     GameObject.cpp \
     Debug.cpp \
-    Transform.cpp
+    Transform.cpp \
+    FileReader.cpp
 
 HEADERS += \
     GameObject.h \
     Component.h \
     Debug.h \
-    Transform.h
+    Transform.h \
+    FileReader.h
 

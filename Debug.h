@@ -7,8 +7,10 @@
 #include <string>
 #include <list>
 
-#include "glm/glm.hpp"
-#include "AsciiGL/Window.h"
+#include "AsciiGL/AsciiGL.h"
+
+namespace ae
+{
 
 enum DebugMode
 {
@@ -92,5 +94,7 @@ public:
     static void warning(ostringstream &log);
     static void error(ostringstream &log);
 };
+
+}
 
 #endif //DEBUG_H
