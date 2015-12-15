@@ -15,16 +15,17 @@ void Debug::showWindow()
     if(Debug::debugWindow.getWidth() == 0)
     {   //Execute only once, singleton
         Debug::debugWindow.setPos(agl::Window::getMaxWidth()  * 0.9,
-                                  agl::Window::getMaxHeight() * 0.05);
+                                  agl::Window::getMaxHeight() * 0.0);
 
-        Debug::debugWindow.setSize(agl::Window::getMaxWidth()  * 0.05,
-                                   agl::Window::getMaxHeight() * 0.9);
+        Debug::debugWindow.setSize(agl::Window::getMaxWidth()  * 0.15,
+                                   agl::Window::getMaxHeight() * 1.0);
 
+        Debug::debugWindow.setTitle("Debug");
         Debug::debugWindow.drawBox = true;
     }
 
     Debug::debugWindow.erase();
-
+    Debug::debugWindow.printf(1,-1," Debug ");
     int drawBoxOffset = (Debug::debugWindow.drawBox ? 1 : 0);
     int y = Debug::debugWindow.getClippedHeight() - drawBoxOffset; //Begin from the bottom
     for(auto rit= Debug::windowMessages.begin(); rit != Debug::windowMessages.end(); ++rit)
@@ -45,9 +46,13 @@ void Debug::log(ostringstream &log)
     {
         if (fileStream.is_open()) fileStream << log.str();
 
-        Debug::windowMessages.push_front(log.str());
-        if(Debug::windowMessages.size() >= Debug::WindowMessagesLimit) Debug::windowMessages.pop_back();
-        Debug::showWindow();
+    }
+
+    if (outputMode & DbgModeTerm)
+    {
+      Debug::windowMessages.push_front(log.str());
+      if(Debug::windowMessages.size() >= Debug::WindowMessagesLimit) Debug::windowMessages.pop_back();
+      Debug::showWindow();
     }
 }
 
@@ -56,15 +61,13 @@ void Debug::warning(ostringstream &log)
     if (outputMode & DbgModeFile and fileMode & DbgModeWarning)
     {
         if (fileStream.is_open()) fileStream << log.str();
-
-        Debug::windowMessages.push_front(log.str());
-        if(Debug::windowMessages.size() >= Debug::WindowMessagesLimit) Debug::windowMessages.pop_back();
-        Debug::showWindow();
     }
 
     if (outputMode & DbgModeTerm)
     {
-        cerr << log.str();
+      Debug::windowMessages.push_front(log.str());
+      if(Debug::windowMessages.size() >= Debug::WindowMessagesLimit) Debug::windowMessages.pop_back();
+      Debug::showWindow();
     }
 }
 
@@ -73,15 +76,13 @@ void Debug::error(ostringstream &log)
     if (outputMode & DbgModeFile and fileMode & DbgModeError)
     {
         if (fileStream.is_open()) fileStream << log.str();
-
-        Debug::windowMessages.push_front(log.str());
-        if(Debug::windowMessages.size() >= Debug::WindowMessagesLimit) Debug::windowMessages.pop_back();
-        Debug::showWindow();
     }
 
     if (outputMode & DbgModeTerm)
     {
-        cerr << log.str();
+      Debug::windowMessages.push_front(log.str());
+      if(Debug::windowMessages.size() >= Debug::WindowMessagesLimit) Debug::windowMessages.pop_back();
+      Debug::showWindow();
     }
 }
 
