@@ -22,6 +22,7 @@
 #include "VAO.h"
 
 #include "GameObject.h"
+#include "Transform.h"
 
 using namespace std;
 using namespace agl;
@@ -157,29 +158,32 @@ int main()
     V = glm::lookAt(glm::vec3(cameraX,0,cameraZ),glm::vec3(cameraX,0,cameraZ-20),glm::vec3(0,1,0));
     pl.program.uniforms.set("V", V);
 
+
+
     trans += 0.05;
     rotation += 0.005f;
+
     glm::mat4 M(1.0f);
-    M = glm::translate(M, glm::vec3(-12,-8, ((sin(trans)*0.5+0.5f)*-37)-1));
-    M = glm::rotate(M, rotation*5, glm::vec3(0,1,0));
-    M = glm::scale(M,glm::vec3(0.15));
 
+    Transform t;
+    t.position =  glm::vec3(-12,-8, ((sin(trans)*0.5+0.5f)*-37)-1);
+    t.rotation = glm::angleAxis(rotation*5, glm::vec3(0,1,0));
+    t.scale = glm::vec3(0.15);
+    t.getModelMatrix(M);
     pl.program.uniforms.set("M", M);
     pl.drawVAO(vao, fb);
 
-    M = glm::mat4(1.0f);
-    M = glm::translate(M, glm::vec3(((sin(trans*0.5f))*3),-15,-20));
-    M = glm::rotate(M, rotation*9, glm::vec3(0,1,0));
-    M = glm::scale(M,glm::vec3(0.2));
-
+    t.position =   glm::vec3(((sin(trans*0.5f))*3),-15,-20);
+    t.rotation = glm::angleAxis( rotation*9, glm::vec3(0,1,0));
+    t.scale = glm::vec3(0.2);
+    t.getModelMatrix(M);
     pl.program.uniforms.set("M", M);
     pl.drawVAO(vao, fb);
 
-    M = glm::mat4(1.0f);
-    M = glm::translate(M, glm::vec3(12,-8,-13));
-    M = glm::rotate(M, rotation*14, glm::vec3(0,1,0));
-    M = glm::scale(M,glm::vec3(0.2));
-
+    t.position =  glm::vec3(12,-8,-13);
+    t.rotation = glm::angleAxis(rotation*14, glm::vec3(0,1,0));
+    t.scale = glm::vec3(0.2);
+    t.getModelMatrix(M);
     pl.program.uniforms.set("M", M);
     pl.drawVAO(vao, fb);
 
