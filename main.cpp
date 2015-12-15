@@ -66,14 +66,6 @@ glm::vec4 fshader(const GenericMap &fragmentAttributes, const GenericMap &unifor
   return glm::vec4(att * texColor.xyz(), 1);
 }
 
-class Transform : public Component
-{
-public:
-  Transform() { }
-
-  void mec() { name = name + "MEC"; }
-};
-
 int main()
 {
   Window window(0, 0, Window::getMaxWidth(), Window::getMaxHeight() * 0.9);
