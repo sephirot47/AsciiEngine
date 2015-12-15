@@ -11,12 +11,14 @@ SOURCES += main.cpp \
     GameObject.cpp \
     Debug.cpp \
     Transform.cpp \
-    FileReader.cpp
+    FileReader.cpp \
+    Texture.cpp
 
 HEADERS += \
     GameObject.h \
     Component.h \
     Debug.h \
     Transform.h \
-    FileReader.h
+    FileReader.h \
+    Texture.h
 

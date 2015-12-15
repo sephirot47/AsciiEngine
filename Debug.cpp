@@ -1,5 +1,7 @@
 #include "Debug.h"
 
+using namespace ae;
+
 string Debug::logFile;
 ofstream Debug::fileStream;
 unsigned int Debug::fileMode = DebugModeLog | DebugModeWarning | DebugModeError;

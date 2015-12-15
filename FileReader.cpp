@@ -1,6 +1,6 @@
 #include "FileReader.h"
 
-using namespace agl;
+using namespace ae;
 
 FileReader::FileReader()
 {

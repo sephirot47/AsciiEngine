@@ -22,6 +22,7 @@
 #include "VAO.h"
 
 #include "GameObject.h"
+#include "Texture.h"
 #include "Transform.h"
 
 using namespace std;
@@ -63,7 +64,7 @@ glm::vec4 fshader(const GenericMap &fragmentAttributes, const GenericMap &unifor
   glm::vec3 lightPos(0, 1, 1);
   float att = glm::clamp(glm::dot(normal, glm::normalize(lightPos)), 0.0f, 1.0f);
 
-  Texture *tex = uniforms.getTexture("tex");
+  ae::Texture *tex = (ae::Texture*) uniforms.getTexture("tex");
   glm::vec4 texColor = tex->sample(uv.x, uv.y);
   return glm::vec4(att * texColor.xyz(), 1);
 }
@@ -122,7 +123,7 @@ int main()
   static float trans = 0.0f;
   static float cameraX = 0.0f, cameraZ = 0.0f;
 
-  Texture *texture = new Texture();
+  ae::Texture *texture = new ae::Texture();
   texture->loadFromFile("luigiD.jpg");
   pl.program.uniforms.set("tex", texture);
 

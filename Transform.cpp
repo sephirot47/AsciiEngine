@@ -1,5 +1,7 @@
 #include "Transform.h"
 
+using namespace ae;
+
 Transform::Transform() :  position(glm::vec3(.0f)), rotation(glm::quat()), scale(glm::vec3(1.0f))
 {
 

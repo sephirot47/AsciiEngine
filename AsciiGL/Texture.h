@@ -9,7 +9,7 @@ namespace agl
 {
 class Texture
 {
-private:
+protected:
   std::vector<float> data;
   int components, width, height;
 
