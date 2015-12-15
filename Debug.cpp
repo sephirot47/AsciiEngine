@@ -15,11 +15,12 @@ void Debug::showWindow()
     if(Debug::debugWindow.getWidth() == 0)
     {   //Execute only once, singleton
         Debug::debugWindow.setPos(agl::Window::getMaxWidth()  * 0.9,
-                                  agl::Window::getMaxHeight() * 0.05);
+                                  agl::Window::getMaxHeight() * 0.0);
 
-        Debug::debugWindow.setSize(agl::Window::getMaxWidth()  * 0.05,
-                                   agl::Window::getMaxHeight() * 0.9);
+        Debug::debugWindow.setSize(agl::Window::getMaxWidth()  * 0.15,
+                                   agl::Window::getMaxHeight() * 1.0);
 
+        Debug::debugWindow.setTitle("Debug");
         Debug::debugWindow.drawBox = true;
     }
 
@@ -39,7 +40,6 @@ void Debug::showWindow()
             ++y; //go down
         }
     }
-    else Debug::debugWindow.printf(0, 0, "%s", ""); //Just to set the color of the box
 
     Debug::debugWindow.display();
 }
@@ -51,9 +51,13 @@ void Debug::log(ostringstream &log)
     {
         if (fileStream.is_open()) fileStream << log.str();
 
-        Debug::windowMessages.push_front(log.str());
-        if(Debug::windowMessages.size() >= Debug::WindowMessagesLimit) Debug::windowMessages.pop_back();
-        Debug::showWindow();
+    }
+
+    if (outputMode & DebugModeTerm)
+    {
+      Debug::windowMessages.push_front(log.str());
+      if(Debug::windowMessages.size() >= Debug::WindowMessagesLimit) Debug::windowMessages.pop_back();
+      Debug::showWindow();
     }
 }
 
@@ -62,15 +66,13 @@ void Debug::warning(ostringstream &log)
     if (outputMode & DebugModeFile and fileMode & DebugModeWarning)
     {
         if (fileStream.is_open()) fileStream << log.str();
-
-        Debug::windowMessages.push_front(log.str());
-        if(Debug::windowMessages.size() >= Debug::WindowMessagesLimit) Debug::windowMessages.pop_back();
-        Debug::showWindow();
     }
 
     if (outputMode & DebugModeTerm)
     {
-        cerr << log.str();
+      Debug::windowMessages.push_front(log.str());
+      if(Debug::windowMessages.size() >= Debug::WindowMessagesLimit) Debug::windowMessages.pop_back();
+      Debug::showWindow();
     }
 }
 
@@ -107,6 +109,7 @@ void Debug::setFile(string filepath)
         fileStream.open(logFile,fstream::out);
 }
 
+
 ostream& operator<<(ostream &log, const glm::vec2 &v)
 {
     log << "vec2(" << v.x << ", " << v.y << ")";
@@ -135,3 +138,4 @@ ostream &operator<<(ostream &log, const glm::mat4 &v)
     log << " " << v[0][3] << ", " << v[1][3] << ", " << v[2][3] << ", " << v[3][3] << ")" << endl;
     return log;
 }
+

@@ -15,6 +15,7 @@ class Window
 private:
     WINDOW *window;
     int x, y, width, height;
+    std::string title;
 
 public:
     bool drawBox;
@@ -32,8 +33,10 @@ public:
     void setPos(int x, int y);
     void setSize(const glm::vec2& size);
     void setSize(int width, int height);
+    void setTitle(const std::string& newTitle);
 
     void printf(int x, int y, const char* format, ... );
+    void write(int x, int y, std::string str);
 
     int getX() { return x; }
     int getY() { return y; }
