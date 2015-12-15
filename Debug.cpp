@@ -2,8 +2,8 @@
 
 string Debug::logFile;
 ofstream Debug::fileStream;
-unsigned int Debug::fileMode = DbgModeLog | DbgModeWarning | DbgModeError;
-unsigned int Debug::outputMode = DbgModeFile | DbgModeTerm;
+unsigned int Debug::fileMode = DebugModeLog | DebugModeWarning | DebugModeError;
+unsigned int Debug::outputMode = DebugModeFile | DebugModeTerm;
 
 agl::Window Debug::debugWindow = agl::Window(0,0,0,0);
 
@@ -25,15 +25,21 @@ void Debug::showWindow()
 
     Debug::debugWindow.erase();
 
-    int drawBoxOffset = (Debug::debugWindow.drawBox ? 1 : 0);
-    int y = Debug::debugWindow.getClippedHeight() - drawBoxOffset; //Begin from the bottom
-    for(auto rit= Debug::windowMessages.begin(); rit != Debug::windowMessages.end(); ++rit)
+    if(Debug::windowMessages.size() > 0)
     {
-        Debug::debugWindow.printf(drawBoxOffset, y, "%s", (*rit).c_str());
-
-        --y; //go up
-        if(y < drawBoxOffset-1) break; //When arrived to top, just stop
+        int drawBoxOffset = (Debug::debugWindow.drawBox ? 1 : 0);
+        int maxLines = Debug::debugWindow.getClippedHeight() - drawBoxOffset * 2;
+        int endOffset = glm::min(maxLines, (int)Debug::windowMessages.size());
+        auto itEnd = Debug::windowMessages.begin();
+        std::advance(itEnd, endOffset);
+        int y = drawBoxOffset;
+        for(auto it = Debug::windowMessages.begin(); it != itEnd; ++it)
+        {
+            Debug::debugWindow.printf(drawBoxOffset, y, "%s", (*it).c_str());
+            ++y; //go down
+        }
     }
+    else Debug::debugWindow.printf(0, 0, "%s", ""); //Just to set the color of the box
 
     Debug::debugWindow.display();
 }
@@ -41,7 +47,7 @@ void Debug::showWindow()
 void Debug::log(ostringstream &log)
 {
 
-    if (outputMode & DbgModeFile and fileMode & DbgModeLog)
+    if (outputMode & DebugModeFile and fileMode & DebugModeLog)
     {
         if (fileStream.is_open()) fileStream << log.str();
 
@@ -53,7 +59,7 @@ void Debug::log(ostringstream &log)
 
 void Debug::warning(ostringstream &log)
 {
-    if (outputMode & DbgModeFile and fileMode & DbgModeWarning)
+    if (outputMode & DebugModeFile and fileMode & DebugModeWarning)
     {
         if (fileStream.is_open()) fileStream << log.str();
 
@@ -62,7 +68,7 @@ void Debug::warning(ostringstream &log)
         Debug::showWindow();
     }
 
-    if (outputMode & DbgModeTerm)
+    if (outputMode & DebugModeTerm)
     {
         cerr << log.str();
     }
@@ -70,7 +76,7 @@ void Debug::warning(ostringstream &log)
 
 void Debug::error(ostringstream &log)
 {
-    if (outputMode & DbgModeFile and fileMode & DbgModeError)
+    if (outputMode & DebugModeFile and fileMode & DebugModeError)
     {
         if (fileStream.is_open()) fileStream << log.str();
 
@@ -79,7 +85,7 @@ void Debug::error(ostringstream &log)
         Debug::showWindow();
     }
 
-    if (outputMode & DbgModeTerm)
+    if (outputMode & DebugModeTerm)
     {
         cerr << log.str();
     }
@@ -87,13 +93,13 @@ void Debug::error(ostringstream &log)
 
 void Debug::setFile(string filepath)
 {
-    if (filepath == CZ_AUTO_LOG_FILE)
+    if (filepath == DebugAutoLogFile)
     {
-        string dbg = CZ_LOG_DIR;
-        dbg.append("/");
-        dbg.append("test");
-        dbg.append(".log");
-        filepath = dbg;
+        string Debug = DebugLogDir;
+        Debug.append("/");
+        Debug.append("test");
+        Debug.append(".log");
+        filepath = Debug;
         cerr << "Saving log to: " << filepath << endl;
     }
     logFile = filepath;
@@ -101,7 +107,6 @@ void Debug::setFile(string filepath)
         fileStream.open(logFile,fstream::out);
 }
 
-/*
 ostream& operator<<(ostream &log, const glm::vec2 &v)
 {
     log << "vec2(" << v.x << ", " << v.y << ")";
@@ -114,12 +119,13 @@ ostream& operator<<(ostream &log, const glm::vec3 &v)
     return log;
 }
 
+/*
 ostream& operator<<(ostream &log, const glm::quat &q)
 {
     log << "quat(" << q.x << ", " << q.y << ", " << q.z << ", " << q.w << ")";
     return log;
 }
-
+*/
 
 ostream &operator<<(ostream &log, const glm::mat4 &v)
 {
@@ -129,4 +135,3 @@ ostream &operator<<(ostream &log, const glm::mat4 &v)
     log << " " << v[0][3] << ", " << v[1][3] << ", " << v[2][3] << ", " << v[3][3] << ")" << endl;
     return log;
 }
-*/
