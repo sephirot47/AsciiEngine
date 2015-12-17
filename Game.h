@@ -33,7 +33,6 @@ class Game
 public:
   agl::Window window;
   Scene currentScene;
-  agl::Pipeline pl;
 
   Game();
   void loop();

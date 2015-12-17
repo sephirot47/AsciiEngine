@@ -56,4 +56,50 @@ Scene::Scene(int width, int height) : framebuffer(agl::Framebuffer(width, height
   pl.program.uniforms.set("P", P);
   pl.program.uniforms.set("screenWidth", framebuffer.getWidth());
   pl.program.uniforms.set("screenHeight", framebuffer.getHeight());
+
+  luigi.addComponent<Transform>();
+  luigi.addComponent<Mesh>();
+  luigi.getComponent<Mesh>()->loadFromFile("./luigi-lowpoly.obj");
+
+  ae::Texture *texture = new ae::Texture();
+  texture->loadFromFile("luigiD.jpg");
+  pl.program.uniforms.set("tex", texture);
+}
+
+void Scene::renderToFramebuffer()
+{
+    static float trans = 0.0f, rotation = 0.0f;
+
+    glm::mat4 V(1.0f);
+    V = glm::lookAt(glm::vec3(0,0,0),glm::vec3(0,0,-20),glm::vec3(0,1,0));
+    pl.program.uniforms.set("V", V);
+
+    trans += 0.05;
+    rotation += 0.005f;
+
+    glm::mat4 M(1.0f);
+
+    framebuffer.clearBuffers();
+
+    Transform& t = *(luigi.getComponent<Transform>());
+    t.position =  glm::vec3(-12, -8, ((sin(trans)*0.5+0.5f)*-37)-1);
+    t.rotation = glm::angleAxis(rotation*5, glm::vec3(0,1,0));
+    t.scale = glm::vec3(0.15);
+    t.getModelMatrix(M);
+    pl.program.uniforms.set("M", M);
+    pl.drawVAO(*(luigi.getComponent<Mesh>()->getVAO()), framebuffer);
+
+    t.position =   glm::vec3(((sin(trans*0.5f))*3),-15,-20);
+    t.rotation = glm::angleAxis( rotation*9, glm::vec3(0,1,0));
+    t.scale = glm::vec3(0.2);
+    t.getModelMatrix(M);
+    pl.program.uniforms.set("M", M);
+    pl.drawVAO(*(luigi.getComponent<Mesh>()->getVAO()), framebuffer);
+
+    t.position =  glm::vec3(12,-8,-13);
+    t.rotation = glm::angleAxis(rotation*14, glm::vec3(0,1,0));
+    t.scale = glm::vec3(0.2);
+    t.getModelMatrix(M);
+    pl.program.uniforms.set("M", M);
+    pl.drawVAO(*(luigi.getComponent<Mesh>()->getVAO()), framebuffer);
 }
