@@ -38,10 +38,10 @@ void Debug::showWindow()
         int y = drawBoxOffset;
         for(auto it = Debug::windowMessages.begin(); it != itEnd; ++it)
         {
-            Debug::debugWindow.printf(drawBoxOffset, y, (*it).c_str());
+            Debug::debugWindow.write(drawBoxOffset, y, *it);
             ++y; //go down
         }
-    } else Debug::debugWindow.printf(0,0,""); //change color if nothings written
+    } else Debug::debugWindow.write(0,0,""); //change color if nothings written
 
     Debug::debugWindow.display();
 }

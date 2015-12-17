@@ -36,7 +36,7 @@ public:
     void setTitle(const std::string& newTitle);
 
     void printf(int x, int y, const char* format, ... );
-    void write(int x, int y, std::string str);
+    void write(int x, int y, const std::string &str);
 
     int getX() { return x; }
     int getY() { return y; }
