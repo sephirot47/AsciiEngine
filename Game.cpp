@@ -1,13 +1,11 @@
 #include "Game.h"
 
-using namespace std;
-using namespace agl;
 using namespace ae;
 
-Game::Game() : window(agl::Window(0, 0, agl::Window::getMaxWidth(), agl::Window::getMaxHeight())),
-               currentScene(Scene(window.getWidth(), window.getHeight()))
+Game::Game() : window(agl::Window(0, 0, agl::Window::getMaxWidth(), agl::Window::getMaxHeight()))
 {
     srand(time(0));
+    framebuffer = agl::Framebuffer(window.getWidth(), window.getHeight());
 }
 
 void Game::loop()
@@ -16,11 +14,12 @@ void Game::loop()
   {
     debugLog("Rand: " << rand());
 
+    framebuffer.clearBuffers();
     window.erase();
 
     //Render scene
-    currentScene.renderToFramebuffer();
-    window.render(currentScene.framebuffer);
+    currentScene.render(framebuffer);
+    window.render(framebuffer);
     window.display();
     //
 

@@ -42,20 +42,10 @@ glm::vec4 fshader(const agl::GenericMap &fragmentAttributes, const agl::GenericM
   return glm::vec4(att * texColor.xyz(), 1);
 }
 
-Scene::Scene(int width, int height) : framebuffer(agl::Framebuffer(width, height))
+Scene::Scene()
 {
-  framebuffer.clearBuffers();
   pl.program.fragmentShader = fshader;
   pl.program.vertexShader = vshader;
-
-  glm::mat4 P = glm::perspective(M_PI/3.0,
-                                 double(framebuffer.getWidth()) / framebuffer.getHeight(),
-                                 0.5,
-                                 40.0);
-  P = glm::scale(glm::mat4(1.0f), glm::vec3(1,0.6,1)) * P;
-  pl.program.uniforms.set("P", P);
-  pl.program.uniforms.set("screenWidth", framebuffer.getWidth());
-  pl.program.uniforms.set("screenHeight", framebuffer.getHeight());
 
   luigi.addComponent<Transform>();
   luigi.addComponent<Mesh>();
@@ -66,9 +56,18 @@ Scene::Scene(int width, int height) : framebuffer(agl::Framebuffer(width, height
   pl.program.uniforms.set("tex", texture);
 }
 
-void Scene::renderToFramebuffer()
+void Scene::render(agl::Framebuffer &framebuffer)
 {
     static float trans = 0.0f, rotation = 0.0f;
+
+    glm::mat4 P = glm::perspective(M_PI/3.0,
+                                   double(framebuffer.getWidth()) / framebuffer.getHeight(),
+                                   0.5,
+                                   40.0);
+    P = glm::scale(glm::mat4(1.0f), glm::vec3(1,0.6,1)) * P;
+    pl.program.uniforms.set("P", P);
+    pl.program.uniforms.set("screenWidth", framebuffer.getWidth());
+    pl.program.uniforms.set("screenHeight", framebuffer.getHeight());
 
     glm::mat4 V(1.0f);
     V = glm::lookAt(glm::vec3(0,0,0),glm::vec3(0,0,-20),glm::vec3(0,1,0));
@@ -102,4 +101,18 @@ void Scene::renderToFramebuffer()
     t.getModelMatrix(M);
     pl.program.uniforms.set("M", M);
     pl.drawVAO(*(luigi.getComponent<Mesh>()->getVAO()), framebuffer);
+}
+
+void Scene::addGameObject(GameObject &go)
+{
+    gameObjects.push_back(go);
+}
+
+GameObject* Scene::getGameObject(const std::string &name)
+{
+    for(unsigned int i = 0; i < gameObjects.size(); ++i)
+    {
+        if(gameObjects[i].name == name) return &(gameObjects[i]);
+    }
+    return nullptr;
 }

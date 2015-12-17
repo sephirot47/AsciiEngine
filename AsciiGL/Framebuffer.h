@@ -30,6 +30,7 @@ namespace agl
 
     public:
 
+        Framebuffer();
         Framebuffer(int width, int height);
 
         void setPixel(const glm::vec3 &pos, const glm::vec4 &color);

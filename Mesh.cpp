@@ -18,7 +18,7 @@ void Mesh::loadFromFile(const std::string &file)
     //Get bounding box /////////
     minx = miny = minz = 99999;
     maxx = maxy = maxz = -99999;
-    for(int i = 0; i < pos.size(); ++i)
+    for(unsigned int i = 0; i < pos.size(); ++i)
     {
       minx = std::min(minx, pos[i].x);
       maxx = std::max(maxx, pos[i].x);

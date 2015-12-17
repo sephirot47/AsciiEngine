@@ -20,6 +20,8 @@ private:
 
 public:
 
+  std::string name; //gameObject identifier name
+
   GameObject();
 
   template <class T> T* addComponent()

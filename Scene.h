@@ -1,11 +1,14 @@
 #ifndef SCENE_H
 #define SCENE_H
 
+#include <map>
+
+#include "AsciiGL/AsciiGL.h"
+
 #include "Texture.h"
 #include "Transform.h"
 #include "Mesh.h"
 #include "GameObject.h"
-#include "AsciiGL/AsciiGL.h"
 
 namespace ae
 {
@@ -16,14 +19,17 @@ friend class Game;
 
 private:
 
-  agl::Framebuffer framebuffer;
   agl::Pipeline pl;
+  std::vector<GameObject> gameObjects;
   GameObject luigi;
 
 public:
 
-  Scene(int width, int height);
-  void renderToFramebuffer();
+  Scene();
+  void render(agl::Framebuffer &framebuffer);
+
+  void addGameObject(GameObject &go);
+  GameObject* getGameObject(const std::string &name);
 };
 
 }

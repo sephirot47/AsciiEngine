@@ -30,12 +30,15 @@ namespace ae
 
 class Game
 {
-public:
-  agl::Window window;
-  Scene currentScene;
+private:
+    agl::Framebuffer framebuffer;
 
-  Game();
-  void loop();
+public:
+    agl::Window window;
+    Scene currentScene;
+
+    Game();
+    void loop();
 };
 
 }
