@@ -14,7 +14,7 @@ void Game::loop()
 {
   while (true)
   {
-    debugError("Rand: " << rand());
+    debugLog("Rand: " << rand());
 
     window.erase();
 
