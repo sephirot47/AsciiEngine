@@ -1,5 +1,6 @@
 # AsciiEngine
-3D Ascii Game Engine from scratch. 
+3D  C++ ASCII Game Engine in 256color-terminal. 
+From scratch using C++. (Actually using our AsciiGL graphics library, which is from scratch in C++ too)
 Using AsciiGL (https://github.com/JFonS/AsciiGL) as graphical engine (also made from scratch by us just using ncurses to print the characters).
 
 To use it, you must get first the "asciiGL.a" static lib file. In order to do this just do:
